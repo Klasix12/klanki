@@ -1,6 +1,5 @@
-package ru.klasix12.klanki.model;
+package ru.klasix12.klanki.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,25 +8,23 @@ import lombok.RequiredArgsConstructor;
 import ru.klasix12.klanki.validation.groups.OnCreate;
 import ru.klasix12.klanki.validation.groups.OnUpdate;
 
-@Entity
-@Table(name = "cards")
-@Data
 @Builder
+@Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Card {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CardDTO {
+
+    @NotNull(groups = OnUpdate.class)
     private long id;
 
     @NotNull(groups = OnCreate.class)
     private String front;
 
-    @NotNull(groups = OnUpdate.class)
+    @NotNull(groups = OnCreate.class)
     private String back;
 
-    @ManyToOne
-    private Deck deck;
+    @NotNull(groups = {OnCreate.class, OnUpdate.class})
+    private Long deckId;
 
     private Integer priority;
 }

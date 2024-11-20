@@ -31,10 +31,11 @@ public class SuperUserControllerTest {
 
     @Test
     void testCreateUser() throws Exception {
-        String testUsername = "test_username";
+        String testUsername = "testusername";
         String testEmail = "test@test.test";
+        String testPassword = "1234567890";
         SuperUser superUser = SuperUser.builder()
-                .password("test")
+                .password(testPassword)
                 .username(testUsername)
                 .email(testEmail)
                 .build();
@@ -47,5 +48,23 @@ public class SuperUserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value(testUsername))
                 .andExpect(jsonPath("$.email").value(testEmail));
+    }
+
+    @Test
+    void testCreateUser_incorrectUsername() throws Exception {
+        String testUsername = "test username";
+        String testEmail = "test@test.test";
+        SuperUser superUser = SuperUser.builder()
+                .password("1234567890")
+                .username(testUsername)
+                .email(testEmail)
+                .build();
+
+        when(superUserService.create(any(SuperUser.class))).thenReturn(SuperUserMapper.toDto(superUser));
+
+        mockMvc.perform(post("/api/super-user")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(superUser)))
+                .andExpect(status().is4xxClientError());
     }
 }

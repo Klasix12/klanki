@@ -1,4 +1,4 @@
-package ru.klasix12.klanki.model;
+package ru.klasix12.klanki.dto;
 
 import lombok.Builder;
 import lombok.Data;
